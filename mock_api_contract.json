@@ -1,13 +1,15 @@
 {
   "generated_at": "2026-06-05T00:00:00+09:00",
-  "assumption": "Dummy contracts for a future API-to-normalized-DB pipeline. Backend is intentionally out of scope.",
+  "assumption": "Dummy contracts for a future API-to-normalized-DB pipeline. Backend is intentionally out of scope. Product principles follow VOLT AX BI Platform Blueprint Brandgenome v0.1.",
   "ingestion_flow": [
-    "Source API connector",
-    "Raw landing table with immutable payload",
-    "Normalization and Korean accounting calendar guardrails",
-    "Daily fact tables by order date, settlement date, vendor, product, source, and cost type",
-    "Metric layer for D/W/M dashboards",
-    "Insight and recommendation rules"
+    "Tenant/source data contract metadata with owner, cadence, consent, SLA, and required fields",
+    "Source API connector or controlled CSV/Google Sheet upload",
+    "Immutable raw landing table with payload hash, source timestamp, and retry status",
+    "Schema-first normalization into shared fact/dim ontology with Korean accounting calendar guardrails",
+    "Daily fact tables by order date, settlement date, cash date, vendor, product, source, currency, and cost type",
+    "Data quality gate before report generation or AI recommendation",
+    "Daily report snapshot and D/W/M metric layer",
+    "Management-question tabs, recommendations, command drafts, and audit log"
   ],
   "endpoints": [
     {

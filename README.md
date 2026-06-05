@@ -17,6 +17,10 @@ Static mock dashboard for a cosmetics operating intelligence console.
 - Data views: raw orders, ad spend, costs, daily facts, payroll, tax, FX
 - Market signals: FX, Amazon FBA fees, K-beauty demand, Cafe24 channel shift
 - Language toggle: full English / Korean UI toggle for executive presentation
+- Blueprint alignment: VOLT AX BI Platform Blueprint Brandgenome v0.1 principles embedded in the dashboard payload and Settings view
+- Daily report contract: fixed executive verdict, what changed, why it changed, what to do, and open-question slots
+- Schema first: 13 standard dim/fact/quality tables shown as the target ontology before KPI or AI recommendations
+- Data quality gate: 9 freshness, completeness, uniqueness, reconciliation, mapping, accounting, outlier, integrity, and FX checks
 
 ## Files
 
@@ -31,6 +35,16 @@ Static mock dashboard for a cosmetics operating intelligence console.
 ## Data Notice
 
 All dashboard data is synthetic and intended for product scoping, customer demos, and connector design. It should not be used as actual financial data.
+
+## Core Product Principles
+
+Source: `VOLT_AX_BI_Platform_Blueprint_Brandgenome_v0.1.xlsx`
+
+- Daily report is the product; chat and command actions are support layers.
+- Schema first; every source must normalize into shared fact/dim tables before KPI or AI recommendations are trusted.
+- KPI tabs are organized by recurring management questions, not by chart collections.
+- Data quality gates run before report generation and recommendations.
+- Multi-tenant isolation, role-based access, data contracts, and audit logs are part of the core platform model.
 
 ## Local Check
 
