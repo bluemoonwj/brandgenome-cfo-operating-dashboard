@@ -1,6 +1,6 @@
-# Brandgenome CFO Operating Dashboard
+# Cosmetics Operating Intelligence
 
-Static mock dashboard for a cosmetics reseller CFO operating console.
+Static mock dashboard for a cosmetics operating intelligence console.
 
 ## Scope
 
@@ -16,6 +16,7 @@ Static mock dashboard for a cosmetics reseller CFO operating console.
 - CFO workflow: command actions, mock decision chat, directive queue
 - Data views: raw orders, ad spend, costs, daily facts, payroll, tax, FX
 - Market signals: FX, Amazon FBA fees, K-beauty demand, Cafe24 channel shift
+- Language toggle: full English / Korean UI toggle for executive presentation
 
 ## Files
 
@@ -24,6 +25,7 @@ Static mock dashboard for a cosmetics reseller CFO operating console.
 - `mock_api_contract.json`: dummy API contracts for future connector design
 - `dashboard_executive_sanity.png`: executive view QA screenshot
 - `dashboard_operating_sanity.png`: operating view QA screenshot
+- `dashboard_korean_sanity.png`: Korean UI QA screenshot
 - `dashboard_sanity.png`: tab/navigation QA screenshot
 
 ## Data Notice
