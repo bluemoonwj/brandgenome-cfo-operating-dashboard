@@ -17,6 +17,11 @@ Static mock dashboard for a cosmetics operating intelligence console.
 - Data views: raw orders, ad spend, costs, daily facts, payroll, tax, FX
 - Market signals: FX, Amazon FBA fees, K-beauty demand, Cafe24 channel shift
 - Language toggle: full English / Korean UI toggle for executive presentation
+- Required four-view finance board from `finance_dashboards_4views_interactive.html`
+- CEO cashflow view: north-star cash KPIs, Profit First five-bucket scenario sliders, channel cash contribution, 30-day cash events
+- CEO financial strategy view: business health KPIs, unit economics, working capital efficiency, channel/SKU concentration risk
+- Finance operator view: daily task checklist, AR aging actions, AP due schedule, channel settlement reconciliation
+- Tax accounting view: filing calendar, monthly bookkeeping progress, VAT status, annual P&L/B/S/C/F statement progress
 - Blueprint alignment: VOLT AX BI Platform Blueprint Brandgenome v0.1 principles embedded in the dashboard payload and Settings view
 - Daily report contract: fixed executive verdict, what changed, why it changed, what to do, and open-question slots
 - Schema first: 13 standard dim/fact/quality tables shown as the target ontology before KPI or AI recommendations
@@ -30,6 +35,11 @@ Static mock dashboard for a cosmetics operating intelligence console.
 - `dashboard_executive_sanity.png`: executive view QA screenshot
 - `dashboard_operating_sanity.png`: operating view QA screenshot
 - `dashboard_korean_sanity.png`: Korean UI QA screenshot
+- `dashboard_ceo_cash_sanity.png`: CEO cashflow view QA screenshot
+- `dashboard_ceo_finance_sanity.png`: CEO financial strategy view QA screenshot
+- `dashboard_finance_ops_sanity.png`: finance operator view QA screenshot
+- `dashboard_tax_accounting_sanity.png`: tax accounting view QA screenshot
+- `dashboard_ceo_cash_korean_sanity.png`: Korean CEO cashflow QA screenshot
 - `dashboard_sanity.png`: tab/navigation QA screenshot
 
 ## Data Notice
