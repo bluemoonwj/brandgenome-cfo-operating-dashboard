@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-06-05T00:00:00+09:00",
+  "assumption": "Dummy contracts for a future API-to-normalized-DB pipeline. Backend is intentionally out of scope.",
+  "ingestion_flow": [
+    "Source API connector",
+    "Raw landing table with immutable payload",
+    "Normalization and Korean accounting calendar guardrails",
+    "Daily fact tables by order date, settlement date, vendor, product, source, and cost type",
+    "Metric layer for D/W/M dashboards",
+    "Insight and recommendation rules"
+  ],
+  "endpoints": [
+    {
+      "name": "Amazon Orders",
+      "method": "GET",
+      "path": "/api/amazon/orders?from=YYYY-MM-DD&to=YYYY-MM-DD",
+      "freshness_sla": "D+1 09:00 KST",
+      "grain": "order line",
+      "sample_payload": {
+        "order_id": "AMZ-20260531-00031",
+        "order_date": "2026-05-31",
+        "settlement_date": "2026-06-14",
+        "asin": "B0COS-VITC",
+        "sku": "vitamin_serum",
+        "currency": "USD",
+        "gross_amount": 74.2,
+        "discount_amount": 3.1,
+        "refund_amount": 0,
+        "units": 2,
+        "marketplace": "US"
+      }
+    },
+    {
+      "name": "Cafe24 Orders",
+      "method": "GET",
+      "path": "/api/cafe24/orders?from=YYYY-MM-DD&to=YYYY-MM-DD",
+      "freshness_sla": "same day + 2h",
+      "grain": "order line",
+      "sample_payload": {
+        "order_id": "C24-20260531-01927",
+        "order_date": "2026-05-31",
+        "payment_date": "2026-05-31",
+        "settlement_date": "2026-06-03",
+        "sku": "barrier_cream",
+        "currency": "KRW",
+        "gross_amount": 72000,
+        "discount_amount": 6000,
+        "refund_amount": 0,
+        "units": 2,
+        "member_grade": "VIP"
+      }
+    },
+    {
+      "name": "Ad Vendor Spend",
+      "method": "GET",
+      "path": "/api/marketing/vendors/spend?from=YYYY-MM-DD&to=YYYY-MM-DD",
+      "freshness_sla": "D+1 10:00 KST",
+      "grain": "vendor x campaign x day",
+      "sample_payload": {
+        "spend_date": "2026-05-31",
+        "vendor_id": "influencer_mina",
+        "vendor_type": "influencer",
+        "campaign_id": "INF-MINA-BARRIER-202605",
+        "target_source": "cafe24",
+        "sku": "barrier_cream",
+        "spend_krw": 350000,
+        "expected_lag_days": 2,
+        "tracked_revenue_krw": 1760000
+      }
+    },
+    {
+      "name": "Expense Ledger",
+      "method": "GET",
+      "path": "/api/finance/expenses?from=YYYY-MM-DD&to=YYYY-MM-DD",
+      "freshness_sla": "D+1 close",
+      "grain": "expense line",
+      "sample_payload": {
+        "transaction_date": "2026-05-31",
+        "vendor_name": "3PL Partner",
+        "cost_type": "fulfillment",
+        "fixed_variable": "variable",
+        "amount_krw": 1840000,
+        "tax_invoice_id": "TAX-20260531-182"
+      }
+    },
+    {
+      "name": "Payroll and Headcount",
+      "method": "GET",
+      "path": "/api/hr/payroll?period=YYYY-MM",
+      "freshness_sla": "monthly close + 1 day",
+      "grain": "month x team",
+      "sample_payload": {
+        "period": "2026-05",
+        "team": "Operations",
+        "headcount": 6,
+        "payroll_krw": 22200000,
+        "social_insurance_krw": 2100000
+      }
+    },
+    {
+      "name": "FX Rates",
+      "method": "GET",
+      "path": "/api/market/fx?currency=USD,JPY&from=YYYY-MM-DD&to=YYYY-MM-DD",
+      "freshness_sla": "daily bank close",
+      "grain": "currency x day",
+      "sample_payload": {
+        "date": "2026-05-31",
+        "currency": "USD",
+        "krw_rate": 1381.7,
+        "source": "bank_close"
+      }
+    },
+    {
+      "name": "Tax Calendar",
+      "method": "GET",
+      "path": "/api/tax/vat?period=YYYY-MM",
+      "freshness_sla": "monthly estimate",
+      "grain": "tax period",
+      "sample_payload": {
+        "period": "2026-05",
+        "vat_output_krw": 11500000,
+        "vat_input_krw": 6200000,
+        "expected_payment_krw": 5300000,
+        "due_date": "2026-06-25"
+      }
+    }
+  ]
+}

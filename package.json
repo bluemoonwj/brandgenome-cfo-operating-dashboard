@@ -1,0 +1,9 @@
+{
+  "name": "brandgenome-cfo-operating-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static mock CFO operating dashboard for a cosmetics reseller, built from synthetic API-style data.",
+  "scripts": {
+    "check": "node -e \"const fs=require('fs'); for (const f of ['index.html','mock_api_contract.json','mock_data_snapshot.json']) { if (!fs.existsSync(f)) throw new Error(f + ' missing'); } console.log('static dashboard package ok');\""
+  }
+}
