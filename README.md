@@ -10,6 +10,7 @@ Static mock dashboard for a cosmetics operating intelligence console.
 - Cadence: daily and weekly operating view
 - Controls: source, product, vendor, decision mode, trend mode, WoW/MoM/YoY comparison
 - Daily comparison: DoD operating pulse and DoD chart overlay
+- Peer-style CFO mainboard: sales summary, profit summary, cash status, inventory risk, cashbook matching
 - Management questions: CFO-facing KPI questions with evidence and action context
 - Revenue breakdown: source mix, share, MER, settlement lag, and YoY baseline
 - KPI tables: channel, product, and ad vendor management tables
@@ -45,6 +46,115 @@ Static mock dashboard for a cosmetics operating intelligence console.
 ## Data Notice
 
 All dashboard data is synthetic and intended for product scoping, customer demos, and connector design. It should not be used as actual financial data.
+
+## Environment Variables and Secrets
+
+This repository currently deploys a static mock dashboard. It does not need runtime environment variables or secrets for Vercel/static hosting.
+
+Do not commit real API keys, passwords, OAuth tokens, verification codes, certificates, or customer exports to this repository. Put production values in Vercel Project Settings > Environment Variables or a secret manager. For local connector smoke tests, keep credentials outside this public repo.
+
+### Required Only When Backend Connectors Are Enabled
+
+Common platform secrets:
+
+```bash
+APP_ENV=
+TENANT_ID=
+BRAND_IDS=entropy,morandypark
+DATABASE_URL=
+DATA_ENCRYPTION_KEY=
+CONNECTOR_RUN_SECRET=
+```
+
+Cafe24:
+
+```bash
+CAFE24_MALL_ID=
+CAFE24_API_VERSION=
+CAFE24_APP_URL=
+CAFE24_REDIRECT_URL=
+CAFE24_CLIENT_ID=
+CAFE24_CLIENT_SECRET=
+CAFE24_FRONT_API_KEY=
+CAFE24_SERVICE_KEY=
+CAFE24_ACCESS_TOKEN=
+CAFE24_REFRESH_TOKEN=
+```
+
+Amazon SP-API:
+
+```bash
+AMAZON_SP_API_LWA_CLIENT_ID=
+AMAZON_SP_API_LWA_CLIENT_SECRET=
+AMAZON_SP_API_REFRESH_TOKEN=
+AMAZON_SP_API_SELLER_ID=
+AMAZON_SP_API_MARKETPLACE_IDS=
+AMAZON_SP_API_REGION=
+```
+
+Meta Ads:
+
+```bash
+META_ADS_ACCESS_TOKEN=
+META_AD_ACCOUNT_IDS=
+META_API_VERSION=
+```
+
+Google Ads:
+
+```bash
+GOOGLE_ADS_CLIENT_ID=
+GOOGLE_ADS_CLIENT_SECRET=
+GOOGLE_ADS_REFRESH_TOKEN=
+GOOGLE_ADS_DEVELOPER_TOKEN=
+GOOGLE_ADS_ACCESS_TOKEN=
+GOOGLE_ADS_API_VERSION=
+GOOGLE_ADS_MANAGER_CUSTOMER_ID=
+GOOGLE_ADS_CUSTOMER_IDS=
+```
+
+Naver Search Ad, brand-scoped:
+
+```bash
+NAVER_SEARCH_AD_ENTROPY_CUSTOMER_ID=
+NAVER_SEARCH_AD_ENTROPY_ACCESS_LICENSE=
+NAVER_SEARCH_AD_ENTROPY_SECRET_KEY=
+NAVER_SEARCH_AD_MORANDYPARK_CUSTOMER_ID=
+NAVER_SEARCH_AD_MORANDYPARK_ACCESS_LICENSE=
+NAVER_SEARCH_AD_MORANDYPARK_SECRET_KEY=
+NAVER_SEARCH_AD_BASE_URL=
+```
+
+Naver GFA, brand-scoped:
+
+```bash
+NAVER_GFA_ENTROPY_AD_ACCOUNT_NO=
+NAVER_GFA_ENTROPY_ACCESS_MANAGER_ACCOUNT_NO=
+NAVER_GFA_ENTROPY_ACCESS_TOKEN=
+NAVER_GFA_MORANDYPARK_AD_ACCOUNT_NO=
+NAVER_GFA_MORANDYPARK_ACCESS_MANAGER_ACCOUNT_NO=
+NAVER_GFA_MORANDYPARK_ACCESS_TOKEN=
+NAVER_GFA_API_VERSION=
+NAVER_GFA_BASE_URL=
+```
+
+Kakao Moments, brand-scoped:
+
+```bash
+KAKAO_MOMENTS_ENTROPY_AD_ACCOUNT_ID=
+KAKAO_MOMENTS_ENTROPY_ACCESS_TOKEN=
+KAKAO_MOMENTS_MORANDYPARK_AD_ACCOUNT_ID=
+KAKAO_MOMENTS_MORANDYPARK_ACCESS_TOKEN=
+KAKAO_MOMENTS_API_VERSION=
+```
+
+### Handling Rules
+
+- Keep OAuth refresh/access tokens server-side only.
+- Never place client secrets in browser JavaScript.
+- Never paste credentials into GitHub issues, pull requests, screenshots, or dashboard mock data.
+- Rotate any credential that was ever committed to a public repository.
+- Keep `.env`, `.env.*`, `secrets/`, `*.pem`, and `*.key` out of git.
 
 ## Core Product Principles
 
