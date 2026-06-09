@@ -15,7 +15,11 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/tiktok/oauth/callback",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
