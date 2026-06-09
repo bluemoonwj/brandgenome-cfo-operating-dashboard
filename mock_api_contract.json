@@ -11,7 +11,108 @@
     "Daily report snapshot and D/W/M metric layer",
     "Management-question tabs, recommendations, command drafts, and audit log"
   ],
+  "refresh_orchestration": {
+    "job_endpoint": "/api/refresh/jobs",
+    "job_status_endpoint": "/api/refresh/jobs/{job_id}",
+    "source_status_endpoint": "/api/refresh/sources",
+    "execution_model": "Central orchestrator queues one deterministic source worker per selected data source. Workers run in parallel and publish metrics only after validation gates pass.",
+    "source_workers": [
+      "workers/cafe24.worker",
+      "workers/meta_ads.worker",
+      "workers/google_ads.worker",
+      "workers/naver_search_ad.worker",
+      "workers/naver_gfa_manual.worker",
+      "workers/kakao_moments.worker",
+      "workers/tiktok_business.worker",
+      "workers/amazon_sp_api.worker",
+      "workers/expense_ledger.worker",
+      "workers/bank_cash.worker",
+      "workers/fx_rates.worker",
+      "workers/tax_calendar.worker"
+    ],
+    "human_in_the_loop": [
+      {
+        "source_id": "naver_gfa",
+        "runtime_prompt": "Naver Korean one-time login number",
+        "storage_policy": "transient only; never stored in request body, localStorage, logs, or env files"
+      }
+    ],
+    "production_tables": [
+      "ops.refresh_job",
+      "ops.source_run_log",
+      "ops.raw_landing_status",
+      "ops.dq_result",
+      "ops.metric_publish_run"
+    ]
+  },
   "endpoints": [
+    {
+      "name": "Create Refresh Job",
+      "method": "POST",
+      "path": "/api/refresh/jobs",
+      "freshness_sla": "request-time",
+      "grain": "job",
+      "sample_payload": {
+        "tenant_id": "brandgenome",
+        "requested_by": "cfo_dashboard",
+        "source_ids": [
+          "cafe24",
+          "meta_ads",
+          "naver_search_ad"
+        ],
+        "brand_ids": [
+          "entropy",
+          "morandypark"
+        ],
+        "date_start": "2026-05-10",
+        "date_end": "2026-06-08",
+        "grain": "daily",
+        "force_full_reload": false
+      }
+    },
+    {
+      "name": "Refresh Job Status",
+      "method": "GET",
+      "path": "/api/refresh/jobs/{job_id}",
+      "freshness_sla": "near real-time",
+      "grain": "job x source worker",
+      "sample_payload": {
+        "job_id": "refresh_20260609_090000",
+        "status": "completed_with_action_required",
+        "source_runs": [
+          {
+            "source_id": "meta_ads",
+            "worker_id": "workers/meta_ads.worker",
+            "status": "success",
+            "rows_loaded": 1842,
+            "raw_target": "raw.meta_ads_insights_jsonl",
+            "normalized_targets": [
+              "fact.ad_performance_daily"
+            ]
+          },
+          {
+            "source_id": "naver_gfa",
+            "worker_id": "workers/naver_gfa_manual.worker",
+            "status": "needs_human_input",
+            "status_reason": "manual_human_input_required"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Refresh Source Status",
+      "method": "GET",
+      "path": "/api/refresh/sources",
+      "freshness_sla": "dashboard load",
+      "grain": "source worker",
+      "sample_payload": {
+        "source_id": "google_ads",
+        "worker_id": "workers/google_ads.worker",
+        "enabled_state": "permission_gated",
+        "last_successful_job_id": null,
+        "last_status": "DEVELOPER_TOKEN_NOT_APPROVED"
+      }
+    },
     {
       "name": "Amazon Orders",
       "method": "GET",
