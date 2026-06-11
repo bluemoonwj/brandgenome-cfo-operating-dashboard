@@ -9,3 +9,5 @@ secrets/
 *.key
 raw_exports/
 warehouse/config.local.json
+cloudflare/config.local.yml
+cloudflare/*.credentials.json

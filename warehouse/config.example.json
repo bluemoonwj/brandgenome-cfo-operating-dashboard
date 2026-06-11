@@ -6,6 +6,7 @@
   "authToken": "",
   "maxLimit": 2000,
   "defaultLimit": 500,
+  "allowCredentials": true,
   "allowOrigins": [
     "http://localhost:3000",
     "http://localhost:4173",

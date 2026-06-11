@@ -41,9 +41,22 @@ http://127.0.0.1:8787
 
 The Raw Data tab can connect to this API for source/dataset browsing, date filters, column selection, pagination, and CSV/JSONL export.
 
+## Cloudflare Access
+
+For small internal/client pilots, expose the local warehouse through Cloudflare Tunnel and protect it with Cloudflare Access.
+
+- Keep `warehouse/server.mjs` bound to `127.0.0.1:8787`
+- Create the Access self-hosted application and allowlist before publishing the tunnel route
+- Route the protected Cloudflare Tunnel public hostname to `http://127.0.0.1:8787`
+- Use explicit emails or a controlled organization domain such as `company.example`
+- Do not allow generic domains such as `gmail.com`
+
+See `cloudflare/README.md` for the full setup and required values.
+
 ## Local Check
 
 ```bash
 npm run check
 npm run warehouse:check
+npm run cloudflare:check
 ```

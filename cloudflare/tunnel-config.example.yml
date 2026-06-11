@@ -1,0 +1,20 @@
+# Copy this file to a local, untracked Cloudflare config path on the customer PC.
+# Do not commit the generated tunnel credentials JSON.
+#
+# Named tunnel mode:
+#   cloudflared tunnel login
+#   cloudflared tunnel create olivo-client-warehouse
+#   cloudflared tunnel route dns olivo-client-warehouse <warehouse-hostname>
+#   cloudflared tunnel run olivo-client-warehouse --config /path/to/config.yml
+#
+# Dashboard-managed tunnel mode is also valid. In that case Cloudflare gives you
+# a tokenized `cloudflared service install ...` command and you configure the
+# public hostname in the Cloudflare dashboard instead of this file.
+
+tunnel: <cloudflare-tunnel-id-or-name>
+credentials-file: /Users/<user>/.cloudflared/<cloudflare-tunnel-id>.json
+
+ingress:
+  - hostname: <warehouse-hostname.example.com>
+    service: http://127.0.0.1:8787
+  - service: http_status:404

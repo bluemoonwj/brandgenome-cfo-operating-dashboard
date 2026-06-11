@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
   authToken: '',
   maxLimit: 2000,
   defaultLimit: 500,
+  allowCredentials: true,
   allowOrigins: [
     'http://localhost:3000',
     'http://localhost:4173',
@@ -332,13 +333,15 @@ function groupDatasets(datasets) {
 function corsHeaders(req, config) {
   const origin = req.headers.origin || '*';
   const allowed = config.allowOrigins.includes('*') || config.allowOrigins.includes(origin) || (origin === 'null' && config.allowOrigins.includes('null'));
-  return {
+  const headers = {
     'Access-Control-Allow-Origin': allowed ? origin : config.allowOrigins[0] || '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Warehouse-Token',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Warehouse-Token, CF-Access-Client-Id, CF-Access-Client-Secret',
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin'
   };
+  if (config.allowCredentials) headers['Access-Control-Allow-Credentials'] = 'true';
+  return headers;
 }
 
 function sendJson(req, res, config, status, body) {

@@ -1,0 +1,46 @@
+{
+  "application": {
+    "name": "olivo-client-warehouse",
+    "type": "self_hosted",
+    "public_hostname": "<warehouse-hostname.example.com>",
+    "session_duration": "24h"
+  },
+  "policy": {
+    "name": "Allow approved pilot users",
+    "decision": "allow",
+    "include": [
+      {
+        "email_domain": {
+          "domain": "company.example"
+        }
+      },
+      {
+        "email": {
+          "email": "approved.user@example.com"
+        }
+      }
+    ],
+    "exclude": [
+      {
+        "email": {
+          "email": "blocked.user@example.com"
+        }
+      }
+    ],
+    "require": []
+  },
+  "cors": {
+    "allowed_origins": [
+      "https://brandgenome-cfo-operating-dashboard.vercel.app"
+    ],
+    "allowed_methods": [
+      "GET",
+      "OPTIONS"
+    ],
+    "allowed_headers": [
+      "Content-Type",
+      "X-Warehouse-Token"
+    ],
+    "allow_credentials": true
+  }
+}
