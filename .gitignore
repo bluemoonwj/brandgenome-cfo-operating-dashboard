@@ -7,3 +7,5 @@ npm-debug.log*
 secrets/
 *.pem
 *.key
+raw_exports/
+warehouse/config.local.json

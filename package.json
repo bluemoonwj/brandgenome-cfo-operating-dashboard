@@ -4,6 +4,8 @@
   "private": true,
   "description": "Static CFO operating dashboard with sanitized live Cafe24, paid-media, and BOK FX extracts.",
   "scripts": {
-    "check": "node -e \"const fs=require('fs'); for (const f of ['index.html','mock_api_contract.json','mock_data_snapshot.json']) { if (!fs.existsSync(f)) throw new Error(f + ' missing'); } console.log('static dashboard package ok');\""
+    "check": "node -e \"const fs=require('fs'); for (const f of ['index.html','mock_api_contract.json','mock_data_snapshot.json','warehouse/server.mjs']) { if (!fs.existsSync(f)) throw new Error(f + ' missing'); } console.log('static dashboard package ok');\"",
+    "warehouse": "node warehouse/server.mjs",
+    "warehouse:check": "node warehouse/server.mjs --check"
   }
 }

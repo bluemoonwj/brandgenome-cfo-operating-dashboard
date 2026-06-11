@@ -1,3 +1,0 @@
-source,panel,coverage_start,coverage_end,row_count,blocker,live_ready
-Naver GFA,Manual UI,2026-06-02,2026-06-08,27,UI probe on 2026-06-10 did not reach report page; full 2024+ manual export still requires authenticated UI report export by date chunks.,
-Naver GFA,API,,,,Connector remains disabled in source catalog pending approved partner/manager authorization.,false

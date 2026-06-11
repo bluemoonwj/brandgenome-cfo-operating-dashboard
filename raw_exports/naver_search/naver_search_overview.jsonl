@@ -1,2 +1,0 @@
-{"source":"Naver Search Ad","panel":"Overview","row_count":16060,"coverage_start":"2024-06-11","coverage_end":"2026-06-10","coverage_days":730}
-{"source":"Naver Search Ad","panel":"API limit","coverage_start":"2024-06-11","coverage_end":"2026-06-10","blocker":"Stats endpoint rejects dates before the recent 730-day window from 2026-06-10."}
