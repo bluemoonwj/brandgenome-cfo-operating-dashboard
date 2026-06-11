@@ -218,16 +218,130 @@ function selectedColumns(dataset, params) {
   return columns.length ? columns : dataset.columns;
 }
 
+function normalizeFilterOp(op) {
+  const normalized = String(op || '').trim().toLowerCase();
+  return {
+    '=': 'equals',
+    '==': 'equals',
+    equals: 'equals',
+    eq: 'equals',
+    '!=': 'not_equals',
+    '<>': 'not_equals',
+    not_equals: 'not_equals',
+    ne: 'not_equals',
+    contains: 'contains',
+    not_contains: 'not_contains',
+    starts_with: 'starts_with',
+    ends_with: 'ends_with',
+    empty: 'empty',
+    not_empty: 'not_empty',
+    '>': 'gt',
+    gt: 'gt',
+    '>=': 'gte',
+    gte: 'gte',
+    '<': 'lt',
+    lt: 'lt',
+    '<=': 'lte',
+    lte: 'lte'
+  }[normalized] || '';
+}
+
+function parseFilters(dataset, params) {
+  const raw = params.get('filters') || '';
+  if (!raw.trim()) return [];
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (_err) {
+    return [];
+  }
+  const input = Array.isArray(parsed)
+    ? parsed
+    : parsed && typeof parsed === 'object' && parsed.column
+      ? [parsed]
+      : Object.entries(parsed || {}).map(([column, value]) => ({ column, op: 'equals', value }));
+  const allowed = new Set(dataset.columns);
+  return input.map((item) => ({
+    column: String(item.column || '').trim(),
+    op: normalizeFilterOp(item.op || item.operator || 'equals'),
+    value: item.value == null ? '' : String(item.value)
+  })).filter((item) => allowed.has(item.column) && item.op);
+}
+
+function numericValue(value) {
+  const text = String(value == null ? '' : value).trim().replace(/,/g, '');
+  if (!text || !/^-?\d+(\.\d+)?$/.test(text)) return null;
+  const number = Number(text);
+  return Number.isFinite(number) ? number : null;
+}
+
+function compareRawValues(a, b) {
+  const leftEmpty = String(a == null ? '' : a).trim() === '';
+  const rightEmpty = String(b == null ? '' : b).trim() === '';
+  if (leftEmpty && rightEmpty) return 0;
+  if (leftEmpty) return 1;
+  if (rightEmpty) return -1;
+  const leftNumber = numericValue(a);
+  const rightNumber = numericValue(b);
+  if (leftNumber != null && rightNumber != null) return leftNumber - rightNumber;
+  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
+}
+
+function rowMatchesFilters(dataset, cells, filters) {
+  if (!filters.length) return true;
+  return filters.every((filter) => {
+    const value = cells[dataset.columns.indexOf(filter.column)] ?? '';
+    const text = String(value).toLowerCase();
+    const expected = String(filter.value || '').toLowerCase();
+    const actualNumber = numericValue(value);
+    const expectedNumber = numericValue(filter.value);
+    if (filter.op === 'empty') return String(value).trim() === '';
+    if (filter.op === 'not_empty') return String(value).trim() !== '';
+    if (filter.op === 'contains') return text.includes(expected);
+    if (filter.op === 'not_contains') return !text.includes(expected);
+    if (filter.op === 'starts_with') return text.startsWith(expected);
+    if (filter.op === 'ends_with') return text.endsWith(expected);
+    if (filter.op === 'equals') return text === expected;
+    if (filter.op === 'not_equals') return text !== expected;
+    if (actualNumber == null || expectedNumber == null) return false;
+    if (filter.op === 'gt') return actualNumber > expectedNumber;
+    if (filter.op === 'gte') return actualNumber >= expectedNumber;
+    if (filter.op === 'lt') return actualNumber < expectedNumber;
+    if (filter.op === 'lte') return actualNumber <= expectedNumber;
+    return true;
+  });
+}
+
+function sortCells(rows, orderIndex, orderDir) {
+  if (orderIndex < 0) return rows;
+  const multiplier = orderDir === 'desc' ? -1 : 1;
+  return rows.sort((left, right) => {
+    const leftValue = left[orderIndex];
+    const rightValue = right[orderIndex];
+    const leftEmpty = String(leftValue == null ? '' : leftValue).trim() === '';
+    const rightEmpty = String(rightValue == null ? '' : rightValue).trim() === '';
+    if (leftEmpty && rightEmpty) return 0;
+    if (leftEmpty) return 1;
+    if (rightEmpty) return -1;
+    return compareRawValues(leftValue, rightValue) * multiplier;
+  });
+}
+
 async function queryDataset(dataset, params, config) {
   const limit = Math.min(Math.max(Number(params.get('limit') || config.defaultLimit), 1), config.maxLimit);
   const offset = Math.max(Number(params.get('offset') || 0), 0);
   const from = params.get('from') || '';
   const to = params.get('to') || '';
   const search = (params.get('search') || '').toLowerCase();
+  const filters = parseFilters(dataset, params);
   const columns = selectedColumns(dataset, params);
   const dateColumn = params.get('date_column') || dataset.date_column;
   const dateIndex = dateColumn ? dataset.columns.indexOf(dateColumn) : -1;
+  const orderBy = params.get('order_by') || '';
+  const orderIndex = orderBy ? dataset.columns.indexOf(orderBy) : -1;
+  const orderDir = params.get('order_dir') === 'desc' ? 'desc' : 'asc';
   const rows = [];
+  const sortableRows = orderIndex >= 0 ? [] : null;
   let matched = 0;
   let scanned = 0;
   const stream = createReadStream(dataset.csv_path, { encoding: 'utf8' });
@@ -243,8 +357,18 @@ async function queryDataset(dataset, params, config) {
     const cells = parseCsvLine(line);
     if (dateIndex >= 0 && !isInDateRange(cells[dateIndex], from, to)) continue;
     if (search && !line.toLowerCase().includes(search)) continue;
-    if (matched >= offset && rows.length < limit) rows.push(toRecord(dataset.columns, cells, columns));
+    if (!rowMatchesFilters(dataset, cells, filters)) continue;
+    if (sortableRows) {
+      sortableRows.push(cells);
+    } else if (matched >= offset && rows.length < limit) {
+      rows.push(toRecord(dataset.columns, cells, columns));
+    }
     matched += 1;
+  }
+  if (sortableRows) {
+    sortCells(sortableRows, orderIndex, orderDir)
+      .slice(offset, offset + limit)
+      .forEach((cells) => rows.push(toRecord(dataset.columns, cells, columns)));
   }
   const nextOffset = offset + rows.length < matched ? offset + rows.length : null;
   const prevOffset = offset > 0 ? Math.max(0, offset - limit) : null;
@@ -260,7 +384,15 @@ async function queryDataset(dataset, params, config) {
     next_offset: nextOffset,
     prev_offset: prevOffset,
     scanned_rows: scanned,
-    filters: { from: from || null, to: to || null, search: search || null, date_column: dateColumn || null }
+    filters: {
+      from: from || null,
+      to: to || null,
+      search: search || null,
+      date_column: dateColumn || null,
+      column_filters: filters,
+      order_by: orderIndex >= 0 ? orderBy : null,
+      order_dir: orderIndex >= 0 ? orderDir : null
+    }
   };
 }
 
@@ -270,8 +402,21 @@ async function streamExport(res, dataset, params) {
   const from = params.get('from') || '';
   const to = params.get('to') || '';
   const search = (params.get('search') || '').toLowerCase();
+  const filters = parseFilters(dataset, params);
   const dateColumn = params.get('date_column') || dataset.date_column;
   const dateIndex = dateColumn ? dataset.columns.indexOf(dateColumn) : -1;
+  const orderBy = params.get('order_by') || '';
+  const orderIndex = orderBy ? dataset.columns.indexOf(orderBy) : -1;
+  const orderDir = params.get('order_dir') === 'desc' ? 'desc' : 'asc';
+  const sortableRows = orderIndex >= 0 ? [] : null;
+  const writeRow = (cells) => {
+    const row = toRecord(dataset.columns, cells, columns);
+    if (format === 'jsonl') {
+      res.write(`${JSON.stringify(row)}\n`);
+    } else {
+      res.write(`${columns.map((column) => csvEscape(row[column])).join(',')}\n`);
+    }
+  };
   res.writeHead(200, {
     'Content-Type': format === 'jsonl' ? 'application/x-ndjson; charset=utf-8' : 'text/csv; charset=utf-8',
     'Content-Disposition': `attachment; filename="${dataset.id}.${format}"`
@@ -289,13 +434,11 @@ async function streamExport(res, dataset, params) {
     const cells = parseCsvLine(line);
     if (dateIndex >= 0 && !isInDateRange(cells[dateIndex], from, to)) continue;
     if (search && !line.toLowerCase().includes(search)) continue;
-    const row = toRecord(dataset.columns, cells, columns);
-    if (format === 'jsonl') {
-      res.write(`${JSON.stringify(row)}\n`);
-    } else {
-      res.write(`${columns.map((column) => csvEscape(row[column])).join(',')}\n`);
-    }
+    if (!rowMatchesFilters(dataset, cells, filters)) continue;
+    if (sortableRows) sortableRows.push(cells);
+    else writeRow(cells);
   }
+  if (sortableRows) sortCells(sortableRows, orderIndex, orderDir).forEach(writeRow);
   res.end();
 }
 
