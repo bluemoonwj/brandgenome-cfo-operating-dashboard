@@ -48,7 +48,7 @@ When a client PoC needs public browser access but no DNS/domain change is availa
 - Keep `warehouse/server.mjs` bound to `127.0.0.1:8787`
 - Set `authToken` in `warehouse/config.local.json` before exposing the API
 - Publish `localhost:8787` through a Tailscale Funnel HTTPS URL
-- Put that HTTPS URL and token into the dashboard Raw Data API controls
+- Put `https://junhome.tail9812b6.ts.net` and the local token into the dashboard Raw Data API controls
 - Stop Funnel or rotate the token after the demo window
 
 See `tailscale/README.md` for the full setup and checks.
