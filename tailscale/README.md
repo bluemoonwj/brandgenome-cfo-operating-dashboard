@@ -86,13 +86,13 @@ If no public URL is set, `npm run tailscale:check` validates only the local ware
 Check the warehouse service:
 
 ```bash
-launchctl print gui/$(id -u)/io.olivo.warehouse
+launchctl print gui/$(id -u)/olivo.finance
 ```
 
 Restart the warehouse service:
 
 ```bash
-launchctl kickstart -k gui/$(id -u)/io.olivo.warehouse
+launchctl kickstart -k gui/$(id -u)/olivo.finance
 ```
 
 Check Funnel:
@@ -112,5 +112,5 @@ Rotate the warehouse token:
 ```bash
 cd /Users/jun_home/dev/finance-ax-brandgenome/deploy/brandgenome-cfo-operating-dashboard
 TOKEN=$(openssl rand -base64 32) node -e 'const fs=require("fs"); const p="warehouse/config.local.json"; const c=JSON.parse(fs.readFileSync(p,"utf8")); c.authToken=process.env.TOKEN; fs.writeFileSync(p, JSON.stringify(c,null,2)+"\n", {mode:0o600});'
-launchctl kickstart -k gui/$(id -u)/io.olivo.warehouse
+launchctl kickstart -k gui/$(id -u)/olivo.finance
 ```
