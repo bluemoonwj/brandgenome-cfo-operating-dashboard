@@ -1,0 +1,5 @@
+report_id,dimensions,metrics
+tiktok_business_audience_gender,"{""gender"":""NONE""}","{""impressions"":""0"",""spend"":""0.00"",""clicks"":""0""}"
+tiktok_business_audience_age,"{""age"":""NONE""}","{""spend"":""0.00"",""impressions"":""0"",""clicks"":""0""}"
+tiktok_business_audience_country_code,"{""country_code"":""US""}","{""clicks"":""0"",""impressions"":""0"",""spend"":""0.00""}"
+tiktok_business_audience_platform,"{""platform"":""ANDROID""}","{""impressions"":""0"",""spend"":""0.00"",""clicks"":""0""}"

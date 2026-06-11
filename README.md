@@ -1,61 +1,26 @@
 # Cosmetics Operating Intelligence
 
-Static mock dashboard for a cosmetics operating intelligence console.
+Static CFO operating dashboard for a cosmetics operating intelligence console.
 
 ## Scope
 
-- Revenue sources: Amazon, Cafe24
-- Ad vendors: 10 agency, platform, and influencer vendors
-- Costs: payroll, rent, fulfillment, COGS, import duty, payment fees, campaign management, operations
-- Cadence: daily and weekly operating view
-- Controls: source, product, vendor, decision mode, trend mode, WoW/MoM/YoY comparison
-- Daily comparison: DoD operating pulse and DoD chart overlay
-- Peer-style CFO mainboard: sales summary, profit summary, cash status, inventory risk, cashbook matching
-- Management questions: CFO-facing KPI questions with evidence and action context
-- Revenue breakdown: source mix, share, MER, settlement lag, and YoY baseline
-- KPI tables: channel, product, and ad vendor management tables
-- CFO workflow: command actions, mock decision chat, directive queue
-- Data views: raw orders, ad spend, costs, daily facts, payroll, tax, FX
-- Market signals: FX, Amazon FBA fees, K-beauty demand, Cafe24 channel shift
+- Connected extracts: Cafe24 orders, Google Ads, Meta Ads, Naver Search Ad, Naver GFA manual export, TikTok Business, and BOK ECOS FX rates
+- Display-only source: Kakao Moments remains disabled until OAuth consent and ad-account mapping are complete
+- Lower-priority mock areas: bank, cash, tax, and ledger feeds are still mock or estimated until production feeds are connected
+- Cadence: daily and weekly operating view with source freshness, raw extract preview, ROAS formulas, and action queues
 - Language toggle: full English / Korean UI toggle for executive presentation
-- Required four-view finance board from `finance_dashboards_4views_interactive.html`
-- CEO cashflow view: north-star cash KPIs, Profit First five-bucket scenario sliders, channel cash contribution, 30-day cash events
-- CEO financial strategy view: business health KPIs, unit economics, working capital efficiency, channel/SKU concentration risk
-- Finance operator view: daily task checklist, AR aging actions, AP due schedule, channel settlement reconciliation
-- Tax accounting view: filing calendar, monthly bookkeeping progress, VAT status, annual P&L/B/S/C/F statement progress
-- Blueprint alignment: Olivo AX BI Platform Blueprint v0.1 principles embedded in the dashboard payload and Settings view
-- Daily report contract: fixed executive verdict, what changed, why it changed, what to do, and open-question slots
-- Schema first: 13 standard dim/fact/quality tables shown as the target ontology before KPI or AI recommendations
-- Data quality gate: 9 freshness, completeness, uniqueness, reconciliation, mapping, accounting, outlier, integrity, and FX checks
+- Finance views: CEO cashflow, CEO finance, finance operator, and tax/accounting views remain available for role-based review
 
 ## Files
 
 - `index.html`: self-contained static dashboard
-- `mock_data_snapshot.json`: synthetic source and normalized data snapshot
-- `mock_api_contract.json`: dummy API contracts for future connector design
-- `dashboard_executive_sanity.png`: executive view QA screenshot
-- `dashboard_operating_sanity.png`: operating view QA screenshot
-- `dashboard_korean_sanity.png`: Korean UI QA screenshot
-- `dashboard_ceo_cash_sanity.png`: CEO cashflow view QA screenshot
-- `dashboard_ceo_finance_sanity.png`: CEO financial strategy view QA screenshot
-- `dashboard_finance_ops_sanity.png`: finance operator view QA screenshot
-- `dashboard_tax_accounting_sanity.png`: tax accounting view QA screenshot
-- `dashboard_ceo_cash_korean_sanity.png`: Korean CEO cashflow QA screenshot
-- `dashboard_sanity.png`: tab/navigation QA screenshot
+- `mock_data_snapshot.json`: dashboard data snapshot. The filename is retained for compatibility, but connected-source sections now use sanitized live extracts.
+- `mock_api_contract.json`: connector contract and production input scaffold
+- `dashboard_*_sanity.png`: previous QA screenshots
 
 ## Data Notice
 
-All dashboard data is synthetic and intended for product scoping, customer demos, and connector design. It should not be used as actual financial data.
-
-## Core Product Principles
-
-Source: `Olivo_AX_BI_Platform_Blueprint_v0.1.xlsx`
-
-- Daily report is the product; chat and command actions are support layers.
-- Schema first; every source must normalize into shared fact/dim tables before KPI or AI recommendations are trusted.
-- KPI tabs are organized by recurring management questions, not by chart collections.
-- Data quality gates run before report generation and recommendations.
-- Multi-tenant isolation, role-based access, data contracts, and audit logs are part of the core platform model.
+The static HTML embeds sanitized business extracts for connected sources. Do not publish or share a public deployment unless the client has approved exposing these metrics. Secrets and API tokens are not embedded.
 
 ## Local Check
 

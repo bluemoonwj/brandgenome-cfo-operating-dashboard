@@ -1,0 +1,2 @@
+{"source":"Naver GFA","panel":"Manual UI","coverage_start":"2026-06-02","coverage_end":"2026-06-08","row_count":27,"blocker":"UI probe on 2026-06-10 did not reach report page; full 2024+ manual export still requires authenticated UI report export by date chunks."}
+{"source":"Naver GFA","panel":"API","live_ready":false,"blocker":"Connector remains disabled in source catalog pending approved partner/manager authorization."}

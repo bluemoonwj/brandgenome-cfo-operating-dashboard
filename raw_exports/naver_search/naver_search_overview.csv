@@ -1,0 +1,3 @@
+source,panel,row_count,coverage_start,coverage_end,coverage_days,blocker
+Naver Search Ad,Overview,16060,2024-06-11,2026-06-10,730,
+Naver Search Ad,API limit,,2024-06-11,2026-06-10,,Stats endpoint rejects dates before the recent 730-day window from 2026-06-10.
