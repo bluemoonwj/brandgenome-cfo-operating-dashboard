@@ -37,6 +37,7 @@ curl "http://127.0.0.1:8787/api/raw/query?dataset=real_cafe24_orders&from=2024-0
 - Keep full raw exports outside Git.
 - Bind to `127.0.0.1` by default.
 - Set `authToken` in `warehouse/config.local.json` before exposing the API beyond the local browser.
-- Use Tailscale or Cloudflare Tunnel/Access when a hosted dashboard must reach a customer local machine from outside the local network.
+- Use Tailscale Funnel for domainless client PoCs, or Cloudflare Tunnel/Access when a controlled domain is available.
 - For Cloudflare Access, keep `allowCredentials` enabled so the browser can send the Access cookie.
+- CORS is not authentication; keep `authToken` enabled for any public tunnel.
 - Do not place vendor API credentials in this service or in dashboard state.

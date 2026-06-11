@@ -41,6 +41,18 @@ http://127.0.0.1:8787
 
 The Raw Data tab can connect to this API for source/dataset browsing, date filters, column selection, pagination, and CSV/JSONL export.
 
+## Tailscale Funnel PoC
+
+When a client PoC needs public browser access but no DNS/domain change is available, use Tailscale Funnel with the warehouse token.
+
+- Keep `warehouse/server.mjs` bound to `127.0.0.1:8787`
+- Set `authToken` in `warehouse/config.local.json` before exposing the API
+- Publish `localhost:8787` through a Tailscale Funnel HTTPS URL
+- Put that HTTPS URL and token into the dashboard Raw Data API controls
+- Stop Funnel or rotate the token after the demo window
+
+See `tailscale/README.md` for the full setup and checks.
+
 ## Cloudflare Access
 
 For small internal/client pilots, expose the local warehouse through Cloudflare Tunnel and protect it with Cloudflare Access.
@@ -59,4 +71,5 @@ See `cloudflare/README.md` for the full setup and required values.
 npm run check
 npm run warehouse:check
 npm run cloudflare:check
+npm run tailscale:check
 ```
