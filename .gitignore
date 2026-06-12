@@ -2,6 +2,7 @@
 .vercel
 node_modules
 npm-debug.log*
+build-info.json
 .env
 .env.*
 secrets/
