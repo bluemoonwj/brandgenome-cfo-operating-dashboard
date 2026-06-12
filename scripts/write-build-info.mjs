@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 function git(args, fallback = '') {
   try {
@@ -30,5 +31,30 @@ const buildInfo = {
   generatedAt: new Date().toISOString()
 };
 
+const outputDir = 'public';
+rmSync(outputDir, { recursive: true, force: true });
+mkdirSync(outputDir, { recursive: true });
+
+[
+  'index.html',
+  'mock_api_contract.json',
+  'mock_data_snapshot.json'
+].forEach((file) => {
+  if (existsSync(file)) copyFileSync(file, join(outputDir, file));
+});
+
+if (existsSync('tiktok')) {
+  cpSync('tiktok', join(outputDir, 'tiktok'), { recursive: true });
+}
+
+writeFileSync(join(outputDir, 'build-info.json'), JSON.stringify(buildInfo, null, 2) + '\n');
+
+// Keep a local root copy for simple static-server checks outside Vercel.
 writeFileSync('build-info.json', JSON.stringify(buildInfo, null, 2) + '\n');
-console.log('build-info.json written for ' + (buildInfo.shortCommit || 'unknown commit'));
+
+mkdirSync(dirname(join(outputDir, 'tiktok/oauth/callback/index.html')), { recursive: true });
+if (existsSync(join(outputDir, 'tiktok/oauth/callback.html')) && !existsSync(join(outputDir, 'tiktok/oauth/callback/index.html'))) {
+  copyFileSync(join(outputDir, 'tiktok/oauth/callback.html'), join(outputDir, 'tiktok/oauth/callback/index.html'));
+}
+
+console.log('public/ static build written for ' + (buildInfo.shortCommit || 'unknown commit'));
