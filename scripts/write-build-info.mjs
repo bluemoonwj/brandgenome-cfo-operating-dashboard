@@ -43,18 +43,24 @@ mkdirSync(outputDir, { recursive: true });
   if (existsSync(file)) copyFileSync(file, join(outputDir, file));
 });
 
-if (existsSync('tiktok')) {
-  cpSync('tiktok', join(outputDir, 'tiktok'), { recursive: true });
-}
+['tiktok', 'kakao'].forEach((vendor) => {
+  if (existsSync(vendor)) {
+    cpSync(vendor, join(outputDir, vendor), { recursive: true });
+  }
+});
 
 writeFileSync(join(outputDir, 'build-info.json'), JSON.stringify(buildInfo, null, 2) + '\n');
 
 // Keep a local root copy for simple static-server checks outside Vercel.
 writeFileSync('build-info.json', JSON.stringify(buildInfo, null, 2) + '\n');
 
-mkdirSync(dirname(join(outputDir, 'tiktok/oauth/callback/index.html')), { recursive: true });
-if (existsSync(join(outputDir, 'tiktok/oauth/callback.html')) && !existsSync(join(outputDir, 'tiktok/oauth/callback/index.html'))) {
-  copyFileSync(join(outputDir, 'tiktok/oauth/callback.html'), join(outputDir, 'tiktok/oauth/callback/index.html'));
-}
+['tiktok', 'kakao'].forEach((vendor) => {
+  const indexPath = join(outputDir, vendor, 'oauth/callback/index.html');
+  mkdirSync(dirname(indexPath), { recursive: true });
+  const cleanUrlPath = join(outputDir, vendor, 'oauth/callback.html');
+  if (existsSync(cleanUrlPath) && !existsSync(indexPath)) {
+    copyFileSync(cleanUrlPath, indexPath);
+  }
+});
 
 console.log('public/ static build written for ' + (buildInfo.shortCommit || 'unknown commit'));

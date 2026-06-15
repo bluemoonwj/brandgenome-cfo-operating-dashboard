@@ -15,8 +15,12 @@
   ],
   "rewrites": [
     {
+      "source": "/kakao/oauth/callback",
+      "destination": "/kakao/oauth/callback.html"
+    },
+    {
       "source": "/tiktok/oauth/callback",
-      "destination": "/index.html"
+      "destination": "/tiktok/oauth/callback.html"
     },
     {
       "source": "/:path*",
